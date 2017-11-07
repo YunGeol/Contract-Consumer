@@ -2,11 +2,9 @@ package com.example.consumer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
@@ -24,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureStubRunner(workOffline = true, ids = "com.example:Contract-Provider:+:stubs:8090")
 @DirtiesContext
 public class BeerConsumerTest {
-//    @Autowired
     private RestTemplate restTemplate = new RestTemplate();
 
     @Value("${stubrunner.runningstubs.Contract-Provider.port}")
