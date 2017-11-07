@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@AutoConfigureStubRunner(workOffline = true, ids = "com.example:ContractsOnTheProducerSide:+:stubs:8090")
+@AutoConfigureStubRunner(workOffline = true, ids = "com.example:Contract-Provider:+:stubs:8090")
 @DirtiesContext
 public class BeerConsumerTest {
 //    @Autowired
     private RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${stubrunner.runningstubs.ContractsOnTheProducerSide.port}")
+    @Value("${stubrunner.runningstubs.Contract-Provider.port}")
     int producerPort;
 
     @Test
