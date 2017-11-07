@@ -1,49 +1,43 @@
 package com.example.consumer;
 
-import lombok.Builder;
-import lombok.Data;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureStubRunner(workOffline = true, ids = "com.example:ContractsOnTheProducerSide:+:stubs:8090")
+@DirtiesContext
 public class BeerConsumerTest {
-    RestTemplate restTemplate = new RestTemplate();
+//    @Autowired
+    private RestTemplate restTemplate = new RestTemplate();
 
-    int port = 8090;
+    @Value("${stubrunner.runningstubs.ContractsOnTheProducerSide.port}")
+    int producerPort;
 
     @Test
     public void beerCheckTest() {
         ResponseEntity<Response> response = this.restTemplate.exchange(
             RequestEntity
-                .post(URI.create("http://localhost:" + port + "/check"))
+                .post(URI.create("http://localhost:" + producerPort + "/check"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new Person("GilDong,Hong", 22)),
+                .body(new Person("GilDong", 22)),
             Response.class);
         assertThat(response.getBody().status).isEqualTo(ResponseStatus.OK);
-    }
-
-    @Data
-    public static class Person {
-        private String name;
-        private int age;
-
-        public Person(String name, int age) {
-            this.name = name;
-            this.age = age;
-        }
-    }
-
-    public static class Response {
-        ResponseStatus status;
-    }
-
-    public enum ResponseStatus {
-        OK, NOT_OK
     }
 }
